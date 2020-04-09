@@ -1,0 +1,29 @@
+version: "3"
+services:
+  rabbitmq:
+    hostname: rabbitmq
+    image: masstransit/rabbitmq:latest
+    container_name: sample-platform-rabbitmq
+    networks:
+     - network
+    ports:
+     - "5672:5672"
+     - "15672:15672"
+    healthcheck:
+        timeout: 5s
+        interval: 5s
+        retries: 10
+        test:
+          - "CMD"
+          - "rabbitmqctl"
+          - "status" 
+  service:
+    build: Sample.Platform
+    container_name: sample-platform
+    networks:
+     - network
+    ports:
+     - "5000:80"
+   
+networks:
+    network: {}
