@@ -1,25 +1,19 @@
 version: "3"
 services:
-  rabbitmq:
-    hostname: rabbitmq
-    image: masstransit/rabbitmq:latest
-    container_name: sample-platform-rabbitmq
+  activemq:
+    hostname: activemq
+    image: masstransit/activemq:latest
+    container_name: sample-platform-activemq
     networks:
      - network
     ports:
-     - "5672:5672"
-     - "15672:15672"
-    healthcheck:
-        timeout: 5s
-        interval: 5s
-        retries: 10
-        test:
-          - "CMD"
-          - "rabbitmqctl"
-          - "status" 
+     - "61616:61616"
+     - "8161:8161"
   service:
     build: Sample.Platform
     container_name: sample-platform
+    environment:
+      - MT_TRANSPORT=activemq
     networks:
      - network
     ports:
