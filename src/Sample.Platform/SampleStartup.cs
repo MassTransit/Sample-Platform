@@ -9,14 +9,14 @@ namespace Sample.Platform
     public class SampleStartup :
         IPlatformStartup
     {
-        public void ConfigureMassTransit(IServiceCollectionConfigurator configurator, IServiceCollection services)
+        public void ConfigureMassTransit(IServiceCollectionBusConfigurator configurator, IServiceCollection services)
         {
             configurator.AddConsumer<SampleConsumer>();
         }
 
-        public void ConfigureBus<TEndpointConfigurator>(IBusFactoryConfigurator<TEndpointConfigurator> configurator, IServiceProvider provider)
-            where TEndpointConfigurator : IReceiveEndpointConfigurator
+        public void ConfigureBus<TEndpointConfigurator>(IBusFactoryConfigurator<TEndpointConfigurator> configurator, IBusRegistrationContext context) where TEndpointConfigurator : IReceiveEndpointConfigurator
         {
+
         }
     }
 }
