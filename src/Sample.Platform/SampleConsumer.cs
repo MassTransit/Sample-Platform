@@ -2,6 +2,8 @@ using System.Threading.Tasks;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 
+using Sample.Platform.Contracts;
+
 namespace Sample.Platform
 {
     public class SampleConsumer :

@@ -3,12 +3,14 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
 
-WORKDIR /src
+WORKDIR /src/Sample.Platform.Contracts/
+COPY Sample.Platform.Contracts/* /src/Sample.Platform.Contracts/
 
-COPY *.csproj .
+WORKDIR /src/Sample.Producer/
+COPY Sample.Producer/*.csproj .
 RUN dotnet restore
 
-COPY . .
+COPY Sample.Producer .
 RUN dotnet build -o /app/build
 RUN dotnet publish -c Release -o /app/publish
 

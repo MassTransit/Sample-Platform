@@ -8,4 +8,8 @@
     <PackageReference Include="MassTransit.Platform.Abstractions" Version="7.2.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Sample.Platform.Contracts\Sample.Platform.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

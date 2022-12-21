@@ -1,10 +1,12 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
-WORKDIR /src
+WORKDIR /src/Sample.Platform.Contracts/
+COPY Sample.Platform.Contracts/* /src/Sample.Platform.Contracts/
 
-COPY *.csproj .
+WORKDIR /src/Sample.Platform/
+COPY Sample.Platform/*.csproj .
 RUN dotnet restore -r linux-musl-x64
 
-COPY . .
+COPY Sample.Platform .
 RUN dotnet publish -c Release -o /app -r linux-musl-x64 --no-restore
 
 FROM masstransit/platform:latest

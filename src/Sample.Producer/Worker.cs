@@ -1,6 +1,5 @@
 namespace sample_producer;
 using MassTransit;
-using MassTransit.RabbitMqTransport;
 
 public class Worker : BackgroundService
 {
@@ -28,7 +27,7 @@ public class Worker : BackgroundService
             while (!stoppingToken.IsCancellationRequested)
             {
                 _logger.LogInformation("Sending Message to queue: {time}", DateTimeOffset.Now);
-                await BusControl.Publish<Sample.Platform.SampleCommand>(new { Value = DateTimeOffset.Now.ToString() });
+                await BusControl.Publish<Sample.Platform.Contracts.SampleCommand>(new { Value = DateTimeOffset.Now.ToString() });
                 await Task.Delay(2000, stoppingToken);
             }
 
