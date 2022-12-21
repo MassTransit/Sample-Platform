@@ -16,14 +16,24 @@ services:
         test:
           - "CMD"
           - "rabbitmqctl"
-          - "status" 
-  service:
-    build: Sample.Platform
+          - "status"
+  platform:
+    image: platform-sample
     container_name: sample-platform
     networks:
      - network
     ports:
      - "5000:80"
-   
+    depends_on:
+      - rabbitmq
+  platform-sample-producer:
+    image: platform-sample-producer
+    container_name: platform-sample-producer
+    environment:
+      - MT_RMQ__HOST=rabbitmq
+    networks:
+      - network
+    depends_on:
+      - rabbitmq      
 networks:
     network: {}
