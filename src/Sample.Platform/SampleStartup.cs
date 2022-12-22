@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices.ComTypes;
-using MassTransit;
-using MassTransit.Definition;
+﻿using MassTransit;
 using MassTransit.ExtensionsDependencyInjectionIntegration;
 using MassTransit.Platform.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,15 +15,6 @@ namespace Sample.Platform
 
         public void ConfigureBus<TEndpointConfigurator>(IBusFactoryConfigurator<TEndpointConfigurator> configurator, IBusRegistrationContext context) where TEndpointConfigurator : IReceiveEndpointConfigurator
         {
-        }
-    }
-
-    public class SampleConsumerDefinition : ConsumerDefinition<SampleConsumer>
-    {
-        public SampleConsumerDefinition()
-        {
-            EndpointName = "sample-consumer";
-            ConcurrentMessageLimit = 4;
         }
     }
 }

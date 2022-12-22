@@ -6,11 +6,11 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
 WORKDIR /src/Sample.Platform.Contracts/
 COPY Sample.Platform.Contracts/* /src/Sample.Platform.Contracts/
 
-WORKDIR /src/Sample.Producer/
-COPY Sample.Producer/*.csproj .
-RUN dotnet restore
+WORKDIR /src/Sample.Platform.Producer/
+COPY Sample.Platform.Producer/*.csproj .
+RUN dotnet restore /p:IsDockerBuild=true
 
-COPY Sample.Producer .
+COPY Sample.Platform.Producer .
 RUN dotnet build -o /app/build
 RUN dotnet publish -c Release -o /app/publish
 

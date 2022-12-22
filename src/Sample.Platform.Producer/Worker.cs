@@ -26,7 +26,7 @@ public class Worker : BackgroundService
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Sending Message to queue: {time}", DateTimeOffset.Now);
+                _logger.LogInformation("Sending Message to queue:: {time}", DateTimeOffset.Now);
                 await BusControl.Publish<Sample.Platform.Contracts.SampleCommand>(new { Value = DateTimeOffset.Now.ToString() });
                 await Task.Delay(2000, stoppingToken);
             }

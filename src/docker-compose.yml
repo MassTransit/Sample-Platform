@@ -20,6 +20,9 @@ services:
   platform:
     image: platform-sample
     container_name: sample-platform
+    build:
+      context: .
+      dockerfile: Sample.Platform.Dockerfile
     networks:
      - network
     ports:
@@ -29,8 +32,9 @@ services:
   platform-sample-producer:
     image: platform-sample-producer
     container_name: platform-sample-producer
-    environment:
-      - MT_RMQ__HOST=rabbitmq
+    build:
+      context: .
+      dockerfile: Sample.Platform.Producer.Dockerfile
     networks:
       - network
     depends_on:

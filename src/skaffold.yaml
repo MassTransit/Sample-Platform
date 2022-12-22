@@ -1,0 +1,25 @@
+apiVersion: skaffold/v3
+kind: Config
+build:
+  artifacts:
+    - image: sample-platform-producer
+      context: .
+      docker:
+        dockerfile: Sample.Platform.Producer.Dockerfile
+        noCache: false
+        pullParent: false
+        squash: false
+
+    - image: sample-platform
+      context: .
+      docker:
+        dockerfile: Sample.Platform.Dockerfile
+        noCache: false
+        pullParent: false
+        squash: false
+
+manifests:
+  rawYaml:
+  - k8s/rabbitmq.yaml
+  - k8s/sample-platform-producer-deployment.yaml
+  - k8s/sample-platform-deployment.yaml

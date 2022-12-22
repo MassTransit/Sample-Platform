@@ -1,0 +1,11 @@
+﻿apiVersion: v1
+kind: Pod
+metadata:
+  name: sample-platform-producer
+  namespace: myfluent-uat
+spec:
+  containers:
+  - name: sample-platform-producer
+    image: sample-platform-producer:410abe7-dirty
+  imagePullSecrets:
+    - name: acr-secret

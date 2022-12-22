@@ -18,7 +18,7 @@ namespace Sample.Platform
 
         public Task Consume(ConsumeContext<SampleCommand> context)
         {
-            _logger.LogDebug("Consuming something");
+            _logger.LogDebug($"Consuming something on :: {context?.Message?.Value}");
 
             return Task.CompletedTask;
         }
