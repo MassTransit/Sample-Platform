@@ -18,7 +18,7 @@ services:
           - "rabbitmqctl"
           - "status"
   platform:
-    image: platform-sample
+    image: sample-platform
     container_name: sample-platform
     build:
       context: .
@@ -29,15 +29,15 @@ services:
      - "5000:80"
     depends_on:
       - rabbitmq
-  platform-sample-producer:
-    image: platform-sample-producer
-    container_name: platform-sample-producer
+  sample-platform-producer:
+    image: sample-platform-producer
+    container_name: sample-platform-producer
     build:
       context: .
       dockerfile: Sample.Platform.Producer.Dockerfile
     networks:
       - network
     depends_on:
-      - rabbitmq      
+      - rabbitmq
 networks:
     network: {}

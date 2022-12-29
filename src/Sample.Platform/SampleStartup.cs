@@ -10,7 +10,8 @@ namespace Sample.Platform
 
         public void ConfigureMassTransit(IServiceCollectionBusConfigurator configurator, IServiceCollection services)
         {
-            configurator.AddConsumer<SampleConsumer>();
+            configurator.AddConsumer<CreateSchoolConsumer>();
+            configurator.AddConsumersFromNamespaceContaining<SampleConsumer>();
         }
 
         public void ConfigureBus<TEndpointConfigurator>(IBusFactoryConfigurator<TEndpointConfigurator> configurator, IBusRegistrationContext context) where TEndpointConfigurator : IReceiveEndpointConfigurator
