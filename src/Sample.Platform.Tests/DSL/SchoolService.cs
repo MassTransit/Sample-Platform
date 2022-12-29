@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.Eventing.Reader;
 using MassTransit;
+using MassTransit.Definition;
 using MassTransit.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -32,30 +33,32 @@ public enum ProductType
 public interface ISchoolWelcome
 {
     Task<ISchool> GivenWeHaveASchool(string name);
-    Task AndWeHaveAdministrator(string schoolId, string admin);
+    Task AndWeHaveAdministrator(string schoolId, string adminName);
     void WhenSearchedNameIs(string schoolId, string input);
-    void ThenOutputSpecialGreeting();
-    void ThenOutputStandardGreeting();
+    Task<bool> ThenOutputSpecialGreeting();
+    Task<bool> ThenOutputStandardGreeting();
 }
 
 public class SchoolService : ISchoolWelcome
 {
     private ServiceProvider _provider;
     private InMemoryTestHarness _harness;
-    private ConsumerTestHarness<IConsumer<CreateAdminConsumer>> _CreateAdminConsumerHarness;
 
     public SchoolService()
     {
+        EndpointConvention.Map<ICreateAdmin>(new Uri("queue:CreateAdmin"));
+        EndpointConvention.Map<ISchoolSearch>(new Uri("queue:SchoolSearch"));
+
         _provider = new ServiceCollection()
             .AddTransient<IConsumer<ICreateSchool>, CreateSchoolConsumer>()
             .AddTransient<IConsumer<ICreateAdmin>, CreateAdminConsumer>()
+            .AddTransient<IConsumer<ISchoolSearch>, SchoolSearchConsumer>()
             .AddSingleton<ISchoolContext, SchoolContext>()
             .AddMassTransitInMemoryTestHarness(cfg =>
             {
                 cfg.AddConsumer<CreateSchoolConsumer>();
                 cfg.AddConsumer<CreateAdminConsumer>();
-                cfg.AddConsumerTestHarness<CreateAdminConsumer>();
-
+                cfg.AddConsumer<SchoolSearchConsumer>();
             })
             .AddLogging(cfg =>
             {
@@ -64,7 +67,6 @@ public class SchoolService : ISchoolWelcome
             .BuildServiceProvider(true);
 
         _harness = _provider.GetRequiredService<InMemoryTestHarness>();
-        _CreateAdminConsumerHarness = _harness.Consumer(() => _provider.GetRequiredService<IConsumer<CreateAdminConsumer>>() );
         _harness.Start();
     }
 
@@ -75,28 +77,32 @@ public class SchoolService : ISchoolWelcome
         return result.Message;
     }
 
-    public async Task AndWeHaveAdministrator(string schoolId, string admin)
+    public async Task AndWeHaveAdministrator(string schoolId, string adminName)
     {
-        await _harness.Bus.Publish<ICreateAdmin>(new
+        await _harness.Bus.Send<ICreateAdmin>(new
         {
             SchoolId = schoolId.ToString(),
-            AdminName = admin
+            AdminName = adminName
         });
     }
 
     public async void WhenSearchedNameIs(string schoolId, string input)
     {
-        await _harness.InputQueueSendEndpoint.Send(new { SchoolId = schoolId, AdminSearch = input });
+        await _harness.Bus.Send<ISchoolSearch>(new
+        {
+            SchoolId = schoolId,
+            SearchName = input
+        });
     }
 
-    public async void ThenOutputSpecialGreeting()
+    public async Task<bool> ThenOutputSpecialGreeting()
     {
-        Assert.True(await _CreateAdminConsumerHarness.Consumed.Any<ISpecialGreeting>());
+        return await _harness.Published.Any<ISpecialGreeting>();
     }
 
-    public async void ThenOutputStandardGreeting()
+    public async Task<bool> ThenOutputStandardGreeting()
     {
-        Assert.True(await _CreateAdminConsumerHarness.Consumed.Any<IStandardGreeting>());
+        return await _harness.Published.Any<IStandardGreeting>();
     }
 }
 
