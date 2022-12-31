@@ -7,6 +7,7 @@ This sample shows how to use the MassTransit Platform to build consumers, sagas,
 To build, have Docker installed, and from the `src` folder, execute:
 
 ```shell
+cd src
+docker-compose build
 docker-compose up
 ```
-

@@ -6,4 +6,9 @@ namespace Sample.Platform.Contracts
     {
         string SchoolName { get; set; }
     }
+
+    public class CreateSchool : ICreateSchool
+    {
+        public string SchoolName { get; set; }
+    }
 }

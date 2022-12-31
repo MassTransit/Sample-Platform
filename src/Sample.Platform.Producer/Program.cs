@@ -5,6 +5,7 @@ var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddHostedService<Worker>();
+        // services.AddHostedService<SchoolWorker>();
     })
     .Build();
 

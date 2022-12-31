@@ -2,6 +2,6 @@
 {
     public interface ISpecialGreeting
     {
-        
+        string Message { get; set; }
     }
 }
